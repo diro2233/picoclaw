@@ -48,11 +48,18 @@ func NewTelegramChannel(cfg *config.Config, bus *bus.MessageBus) (*TelegramChann
 	var opts []telego.BotOption
 	telegramCfg := cfg.Channels.Telegram
 
+	// ⭐ 支持自定义 API Server
+	if telegramCfg.APIBase != "" {
+		opts = append(opts, telego.WithAPIServer(telegramCfg.APIBase))
+	}
+
+	// ⭐ 支持自定义 Proxy
 	if telegramCfg.Proxy != "" {
 		proxyURL, parseErr := url.Parse(telegramCfg.Proxy)
 		if parseErr != nil {
 			return nil, fmt.Errorf("invalid proxy URL %q: %w", telegramCfg.Proxy, parseErr)
 		}
+
 		opts = append(opts, telego.WithHTTPClient(&http.Client{
 			Transport: &http.Transport{
 				Proxy: http.ProxyURL(proxyURL),
@@ -67,6 +74,7 @@ func NewTelegramChannel(cfg *config.Config, bus *bus.MessageBus) (*TelegramChann
 		}))
 	}
 
+	// 创建 Bot（带 opts）
 	bot, err := telego.NewBot(telegramCfg.Token, opts...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create telegram bot: %w", err)
