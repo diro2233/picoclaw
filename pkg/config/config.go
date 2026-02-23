@@ -203,6 +203,7 @@ type WhatsAppConfig struct {
 type TelegramConfig struct {
 	Enabled   bool                `json:"enabled"    env:"PICOCLAW_CHANNELS_TELEGRAM_ENABLED"`
 	Token     string              `json:"token"      env:"PICOCLAW_CHANNELS_TELEGRAM_TOKEN"`
+	APIBase   string              `json:"api_base"   env:"PICOCLAW_CHANNELS_TELEGRAM_API_BASE"` // ⭐ 加这一行
 	Proxy     string              `json:"proxy"      env:"PICOCLAW_CHANNELS_TELEGRAM_PROXY"`
 	AllowFrom FlexibleStringSlice `json:"allow_from" env:"PICOCLAW_CHANNELS_TELEGRAM_ALLOW_FROM"`
 }
